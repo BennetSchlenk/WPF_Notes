@@ -4,9 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Notes.View"
+        xmlns:vm="clr-namespace:WPF_Notes.ViewModel"
         mc:Ignorable="d"
         Title="NotesWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <Window.Resources>
+        <vm:NotesVM x:Key="vm"/>
+    </Window.Resources>
+    <DockPanel DataContext="{StaticResource vm}">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Add Notebook"
+                          Command="{Binding NewNotebookCommand}"/>
+                <MenuItem Header="Add Note"
+                          Command="{Binding NewNoteCommand}"
+                          CommandParameter="{Binding SelectedNotebook}"/>
+                <Separator/>
+                <MenuItem Header="Exit"
+                          Command="{Binding ExitApplicationCommand}"/>
+            </MenuItem>
+        </Menu>
+    </DockPanel>
 </Window>

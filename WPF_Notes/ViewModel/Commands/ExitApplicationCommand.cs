@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows;
 
 namespace WPF_Notes.ViewModel.Commands
 {
-    internal class NewNotebookCommand : ICommand
+    internal class ExitApplicationCommand : ICommand
     {
         public NotesVM NotesVM { get; set; }
         public event EventHandler? CanExecuteChanged;
-        public NewNotebookCommand(NotesVM vm)
-        { 
+        public ExitApplicationCommand(NotesVM vm)
+        {
             NotesVM = vm;
         }
 
@@ -23,7 +24,7 @@ namespace WPF_Notes.ViewModel.Commands
 
         public void Execute(object? parameter)
         {
-            NotesVM.CreateNewNotebook();
+            Application.Current.Shutdown();
         }
     }
 }
