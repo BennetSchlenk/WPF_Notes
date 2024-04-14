@@ -11,7 +11,11 @@ namespace WPF_Notes.ViewModel.Commands
     internal class NewNoteCommand : ICommand
     {
         public NotesVM NotesVM { get; set; }
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged 
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
         public NewNoteCommand(NotesVM vm) 
         { 
             NotesVM = vm;
