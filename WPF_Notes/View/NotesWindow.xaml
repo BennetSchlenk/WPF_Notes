@@ -5,14 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Notes.View"
         xmlns:vm="clr-namespace:WPF_Notes.ViewModel"
+        xmlns:uc="clr-namespace:WPF_Notes.Controls"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="800">
+        Title="NotesWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
     </Window.Resources>
     <DockPanel DataContext="{StaticResource vm}">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
+                
                 <MenuItem Header="Add Notebook"
                           Command="{Binding NewNotebookCommand}"/>
                 <MenuItem Header="Add Note"
@@ -23,19 +26,31 @@
                           Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock />
+            </StatusBarItem>
+        </StatusBar>
         <ListView DockPanel.Dock="Left"
                   Width="120"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
+                    <uc:NotebookControl />
+                    <!--<TextBlock Text="{Binding Name}"/>-->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <ListView DockPanel.Dock="Left"
                   Width="120"
                   ItemsSource="{Binding Notes}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Margin" Value="0,5,0,5"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Titel}"/>
@@ -47,6 +62,8 @@
                 <Button Content="Speech"/>
             </ToolBar>
         </ToolBarTray>
-        <Grid />
+        <Grid>
+            <RichTextBox />
+        </Grid>
     </DockPanel>
 </Window>
