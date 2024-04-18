@@ -11,17 +11,25 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPF_Notes.ViewModel;
 
 namespace WPF_Notes.View
 {
     /// <summary>
     /// Interaction logic for NotesWindow.xaml
-    /// </summary>
+    /// </summary> 
     public partial class NotesWindow : Window
     {
         public NotesWindow()
         {
             InitializeComponent();
+        }
+
+        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RichTextBox box = (RichTextBox)sender;
+            var vm = (NotesVM)box.DataContext;
+            vm.RichTextBoxTextChangedCommand.Execute(box);
         }
     }
 }

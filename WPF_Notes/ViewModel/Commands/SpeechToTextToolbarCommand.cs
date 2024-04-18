@@ -7,9 +7,14 @@ using System.Windows.Input;
 
 namespace WPF_Notes.ViewModel.Commands
 {
-    internal class SpeechToolbarCommand : ICommand
+    internal class SpeechToTextToolbarCommand : ICommand
     {
+        public NotesVM NotesVM { get; set; }
         public event EventHandler? CanExecuteChanged;
+        public SpeechToTextToolbarCommand(NotesVM vm)
+        {
+            NotesVM = vm;
+        }
 
         public bool CanExecute(object? parameter)
         {
