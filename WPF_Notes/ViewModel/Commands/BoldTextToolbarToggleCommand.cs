@@ -5,16 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows;
 using System.Windows.Input;
 
 namespace WPF_Notes.ViewModel.Commands
 {
-    class UnderlineTextToolbarCommand : ICommand
+    class BoldTextToolbarToggleCommand : ICommand
     {
         public NotesVM NotesVM { get; set; }
         public event EventHandler? CanExecuteChanged;
-        public UnderlineTextToolbarCommand(NotesVM vm)
+        public BoldTextToolbarToggleCommand(NotesVM vm)
         {
             NotesVM = vm;
         }
@@ -29,7 +28,7 @@ namespace WPF_Notes.ViewModel.Commands
             RichTextBox box = parameter as RichTextBox;
             if (box == null) return;
 
-            box.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+            NotesVM.BoldToggleClicked(box);
         }
     }
 }

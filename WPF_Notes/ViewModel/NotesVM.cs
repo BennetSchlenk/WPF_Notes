@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using WPF_Notes.Model;
@@ -43,14 +44,51 @@ namespace WPF_Notes.ViewModel
             }
         }
 
+        private bool boldToggleButtonState;
+
+        public bool BoldToggleButtonState
+        {
+            get { return boldToggleButtonState; }
+            set
+            {
+                boldToggleButtonState = value;
+                OnPropertyChanged("BoldToggleButtonState");
+            }
+        }
+
+        private bool italicToggleButtonState;
+
+        public bool ItalicToggleButtonState
+        {
+            get { return italicToggleButtonState; }
+            set
+            {
+                italicToggleButtonState = value;
+                OnPropertyChanged("ItalicToggleButtonState");
+            }
+        }
+
+        private bool underlineToggleButtonState;
+
+        public bool UnderlineToggleButtonState
+        {
+            get { return underlineToggleButtonState; }
+            set
+            {
+                underlineToggleButtonState = value;
+                OnPropertyChanged("UnderlineToggleButtonState");
+            }
+        }
+
         public NewNotebookCommand NewNotebookCommand { get; set; }
         public NewNoteCommand NewNoteCommand { get; set; }
         public ExitApplicationCommand ExitApplicationCommand { get; set; }
         public SpeechToTextToolbarCommand SpeechToTextToolbarCommand { get; set; }
         public RichTextBoxTextChangedCommand RichTextBoxTextChangedCommand { get; set; }
-        public BoldTextToolbarCommand BoldTextToolbarCommand { get; set; }
-        public ItalicTextToolbarCommand ItalicTextToolbarCommand { get; set; }
-        public UnderlineTextToolbarCommand UnderlineTextToolbarCommand { get; set; }
+        public RichTextBoxSelectionChangedCommand RichTextBoxSelectionChangedCommand { get; set; }
+        public BoldTextToolbarToggleCommand BoldTextToolbarToggleCommand { get; set; }
+        public ItalicTextToolbarToggleCommand ItalicTextToolbarToggleCommand { get; set; }
+        public UnderlineTextToolbarToggleCommand UnderlineTextToolbarToggleCommand { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -60,9 +98,10 @@ namespace WPF_Notes.ViewModel
             NewNoteCommand = new NewNoteCommand(this);
             ExitApplicationCommand = new ExitApplicationCommand(this);
             RichTextBoxTextChangedCommand = new RichTextBoxTextChangedCommand(this);
-            BoldTextToolbarCommand = new BoldTextToolbarCommand(this);
-            ItalicTextToolbarCommand = new ItalicTextToolbarCommand(this);
-            UnderlineTextToolbarCommand = new UnderlineTextToolbarCommand(this);
+            RichTextBoxSelectionChangedCommand = new RichTextBoxSelectionChangedCommand(this);
+            BoldTextToolbarToggleCommand = new BoldTextToolbarToggleCommand(this);
+            ItalicTextToolbarToggleCommand = new ItalicTextToolbarToggleCommand(this);
+            UnderlineTextToolbarToggleCommand = new UnderlineTextToolbarToggleCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
@@ -127,6 +166,53 @@ namespace WPF_Notes.ViewModel
         {
             int charactersAmount = (new TextRange(box.Document.ContentStart, box.Document.ContentEnd)).Text.Length;
             StatusBarText = $"Note document length: {charactersAmount} characters";
+        }
+
+        public void SetRichtextboxFontToggleButtons(RichTextBox box) 
+        {
+            var selectedWeight = box.Selection.GetPropertyValue(TextElement.FontWeightProperty);
+            var selectedStyle = box.Selection.GetPropertyValue(TextElement.FontStyleProperty);
+            var selectedDecorations = box.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
+
+            BoldToggleButtonState = (selectedWeight != DependencyProperty.UnsetValue) && selectedWeight.Equals(FontWeights.Bold);
+            ItalicToggleButtonState = (selectedStyle != DependencyProperty.UnsetValue) && selectedStyle.Equals(FontStyles.Italic);
+            UnderlineToggleButtonState = (selectedDecorations != DependencyProperty.UnsetValue) && selectedDecorations.Equals(TextDecorations.Underline);
+        }
+
+        public void BoldToggleClicked(RichTextBox box) 
+        {
+            if (BoldToggleButtonState) 
+            {
+                box.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            }
+            else 
+            {
+                box.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+            }
+        }
+
+        public void ItalicToggleClicked(RichTextBox box)
+        {
+            if (ItalicToggleButtonState)
+            {
+                box.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
+            }
+            else
+            {
+                box.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Normal);
+            }
+        }
+
+        public void UnderlineToggleClicked(RichTextBox box)
+        {
+            if (UnderlineToggleButtonState)
+            {
+                box.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+            }
+            else
+            {
+                box.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
+            }
         }
     }
 }

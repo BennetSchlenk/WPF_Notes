@@ -31,5 +31,12 @@ namespace WPF_Notes.View
             var vm = (NotesVM)box.DataContext;
             vm.RichTextBoxTextChangedCommand.Execute(box);
         }
+
+        private void RichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            RichTextBox box = (RichTextBox)sender;
+            var vm = (NotesVM)box.DataContext;
+            vm.RichTextBoxSelectionChangedCommand.Execute(box);
+        }
     }
 }

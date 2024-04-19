@@ -61,16 +61,16 @@
             <ToolBar>
                 <Button Content="Speech" Command="{Binding SpeechToTextToolbarCommand}"/>
                 <Separator />
-                <Button Content="B" FontWeight="Bold" Command="{Binding BoldTextToolbarCommand}" CommandParameter="{Binding ElementName=RichTextBox}"/>
-                <Button Content="I" FontStyle="Italic" Command="{Binding ItalicTextToolbarCommand}" CommandParameter="{Binding ElementName=RichTextBox}"/>
-                <Button Command="{Binding UnderlineTextToolbarCommand}" CommandParameter="{Binding ElementName=RichTextBox}">
+                <ToggleButton Content="B" FontWeight="Bold" IsChecked="{Binding BoldToggleButtonState}" Command="{Binding BoldTextToolbarToggleCommand}" CommandParameter="{Binding ElementName=RichTextBox}"/>
+                <ToggleButton Content="I" FontStyle="Italic" IsChecked="{Binding ItalicToggleButtonState}" Command="{Binding ItalicTextToolbarToggleCommand}" CommandParameter="{Binding ElementName=RichTextBox}"/>
+                <ToggleButton IsChecked="{Binding UnderlineToggleButtonState}" Command="{Binding UnderlineTextToolbarToggleCommand}" CommandParameter="{Binding ElementName=RichTextBox}">
                     <TextBlock Text="U" TextDecorations="Underline"/>
-                </Button>
+                </ToggleButton>
                 <Separator />
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            <RichTextBox x:Name="RichTextBox" TextChanged="RichTextBox_TextChanged" DataContext="{StaticResource vm}"/>
+            <RichTextBox x:Name="RichTextBox" TextChanged="RichTextBox_TextChanged" SelectionChanged="RichTextBox_SelectionChanged" DataContext="{StaticResource vm}"/>
         </Grid>
     </DockPanel>
 </Window>
