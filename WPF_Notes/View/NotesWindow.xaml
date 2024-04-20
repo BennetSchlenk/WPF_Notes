@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Notes.View"
         xmlns:vm="clr-namespace:WPF_Notes.ViewModel"
-        xmlns:uc="clr-namespace:WPF_Notes.Controls"
+        
         mc:Ignorable="d"
         Title="NotesWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
@@ -43,7 +43,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:NotebookControl />
+                    
                     <!--<TextBlock Text="{Binding Name}"/>-->
                 </DataTemplate>
             </ListView.ItemTemplate>

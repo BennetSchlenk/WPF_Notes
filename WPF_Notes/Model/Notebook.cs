@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WPF_Notes.Model
 {
-    internal class Notebook
+    public class Notebook
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
