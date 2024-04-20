@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,151 +18,49 @@ using WPF_Notes.ViewModel.Helpers;
 
 namespace WPF_Notes.ViewModel
 {
-    internal class NotesVM : INotifyPropertyChanged
+    internal partial class NotesVM : ObservableObject
     {
         public ObservableCollection<Notebook> Notebooks { get; set; }
         public ObservableCollection<Note> Notes { get; set; }
 
+
+      
+        [ObservableProperty,NotifyCanExecuteChangedFor(nameof(CreateNewNoteCommand))]
         private Notebook selectedNotebook;
-
-        public Notebook SelectedNotebook
+        partial void OnSelectedNotebookChanged(Notebook value)
         {
-			get { return selectedNotebook; }
-			set 
-			{ 
-				selectedNotebook = value;
-                OnPropertyChanged(nameof(SelectedNotebook));
-                GetNotes();
-			}
-		}
+            GetNotes();
+        }
 
+        [ObservableProperty]
         private string statusBarText;
 
-        public string StatusBarText
-        {
-            get { return statusBarText; }
-            set
-            {
-                statusBarText = value;
-                OnPropertyChanged("StatusBarText");
-            }
-        }
-
+        [ObservableProperty]
         private bool boldToggleButtonState;
 
-        public bool BoldToggleButtonState
-        {
-            get { return boldToggleButtonState; }
-            set
-            {
-                boldToggleButtonState = value;
-                OnPropertyChanged("BoldToggleButtonState");
-            }
-        }
-
+        [ObservableProperty]
         private bool italicToggleButtonState;
 
-        public bool ItalicToggleButtonState
-        {
-            get { return italicToggleButtonState; }
-            set
-            {
-                italicToggleButtonState = value;
-                OnPropertyChanged("ItalicToggleButtonState");
-            }
-        }
-
+        [ObservableProperty]
         private bool underlineToggleButtonState;
 
-        public bool UnderlineToggleButtonState
-        {
-            get { return underlineToggleButtonState; }
-            set
-            {
-                underlineToggleButtonState = value;
-                OnPropertyChanged("UnderlineToggleButtonState");
-            }
-        }
-
+        [ObservableProperty]
         private IEnumerable fontComboBoxItemSource;
 
-        public IEnumerable FontComboBoxItemSource
-        {
-            get { return fontComboBoxItemSource; }
-            set 
-            { 
-                fontComboBoxItemSource = value;
-                OnPropertyChanged("FontComboBoxItemSource");
-            }
-        }
-
+        [ObservableProperty]
         private object fontComboBoxSelectedItem;
 
-        public object FontComboBoxSelectedItem
-        {
-            get { return fontComboBoxSelectedItem; }
-            set 
-            { 
-                fontComboBoxSelectedItem = value;
-                OnPropertyChanged("FontComboBoxSelectedValue");
-            }
-        }
-
-
+        [ObservableProperty]
         private IEnumerable fontSizeComboBoxItemSource;
 
-        public IEnumerable FontSizeComboBoxItemSource
-        {
-            get { return fontSizeComboBoxItemSource; }
-            set 
-            { 
-                fontSizeComboBoxItemSource = value;
-                OnPropertyChanged("FontSizeComboBoxItemSource");
-            }
-        }
-
+        [ObservableProperty]
         private object fontSizeComboBoxSelectedItem;
-
-        public object FontSizeComboBoxSelectedItem
-        {
-            get { return fontSizeComboBoxSelectedItem; }
-            set 
-            {
-                fontSizeComboBoxSelectedItem = value;
-                OnPropertyChanged("FontSizeComboBoxSelectedValue");
-            }
-
-        }
-
-
-        public NewNotebookCommand NewNotebookCommand { get; set; }
-        public NewNoteCommand NewNoteCommand { get; set; }
-        public ExitApplicationCommand ExitApplicationCommand { get; set; }
-        public SpeechToTextToolbarCommand SpeechToTextToolbarCommand { get; set; }
-        public RichTextBoxTextChangedCommand RichTextBoxTextChangedCommand { get; set; }
-        public RichTextBoxSelectionChangedCommand RichTextBoxSelectionChangedCommand { get; set; }
-        public BoldTextToolbarToggleCommand BoldTextToolbarToggleCommand { get; set; }
-        public ItalicTextToolbarToggleCommand ItalicTextToolbarToggleCommand { get; set; }
-        public UnderlineTextToolbarToggleCommand UnderlineTextToolbarToggleCommand { get; set; }
-        public FontSizeComboBoxTextChangedCommand FontSizeComboBoxTextChangedCommand { get; set; }
-        public FontComboBoxSelectionChangedCommand FontComboBoxSelectionChangedCommand { get; set; }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public NotesVM()
         {
-            NewNotebookCommand = new NewNotebookCommand(this);
-            NewNoteCommand = new NewNoteCommand(this);
-            ExitApplicationCommand = new ExitApplicationCommand(this);
-            RichTextBoxTextChangedCommand = new RichTextBoxTextChangedCommand(this);
-            RichTextBoxSelectionChangedCommand = new RichTextBoxSelectionChangedCommand(this);
-            BoldTextToolbarToggleCommand = new BoldTextToolbarToggleCommand(this);
-            ItalicTextToolbarToggleCommand = new ItalicTextToolbarToggleCommand(this);
-            UnderlineTextToolbarToggleCommand = new UnderlineTextToolbarToggleCommand(this);
-            FontSizeComboBoxTextChangedCommand = new FontSizeComboBoxTextChangedCommand(this);
-            FontComboBoxSelectionChangedCommand = new FontComboBoxSelectionChangedCommand(this);
-
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
             GetNotebooks();
@@ -173,7 +73,8 @@ namespace WPF_Notes.ViewModel
             FontSizeComboBoxItemSource = fontSizes;
         }
 
-        public void CreateNewNotebook() 
+        [RelayCommand]
+        private void CreateNewNotebook()
         {
             Notebook newNotebook = new Notebook()
             {
@@ -184,11 +85,18 @@ namespace WPF_Notes.ViewModel
             GetNotebooks();
         }
 
-        public void CreateNewNote(int notebookId) 
+        
+        private bool CanExecuteNewNote() 
         {
-            Note newNote = new Note() 
+            return SelectedNotebook != null;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteNewNote))]
+        private void CreateNewNote()
+        {
+            Note newNote = new Note()
             {
-                NotebookId = notebookId,
+                NotebookId = SelectedNotebook.Id,
                 Titel = "New Note",
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
@@ -198,7 +106,13 @@ namespace WPF_Notes.ViewModel
             GetNotes();
         }
 
-        private void GetNotebooks() 
+        [RelayCommand]
+        private void ExitApplication() 
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void GetNotebooks()
         {
             var notebooks = DatabaseHelper.Read<Notebook>();
             Notebooks.Clear();
@@ -222,18 +136,20 @@ namespace WPF_Notes.ViewModel
             }
         }
 
-        private void OnPropertyChanged(string propertyName) 
+        private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void SetStatusBarText(RichTextBox box) 
+        [RelayCommand]
+        public void SetStatusBarText(RichTextBox box)
         {
             int charactersAmount = (new TextRange(box.Document.ContentStart, box.Document.ContentEnd)).Text.Length;
             StatusBarText = $"Note document length: {charactersAmount} characters";
         }
 
-        public void SetRichtextboxFontToggleButtons(RichTextBox box) 
+        [RelayCommand]
+        public void SetRichtextboxFontToggleButtons(RichTextBox box)
         {
             var selectedWeight = box.Selection.GetPropertyValue(TextElement.FontWeightProperty);
             var selectedStyle = box.Selection.GetPropertyValue(TextElement.FontStyleProperty);
@@ -247,18 +163,20 @@ namespace WPF_Notes.ViewModel
             FontSizeComboBoxSelectedItem = box.Selection.GetPropertyValue(TextElement.FontSizeProperty);
         }
 
-        public void BoldToggleClicked(RichTextBox box) 
+        [RelayCommand]
+        public void BoldToggleClicked(RichTextBox box)
         {
-            if (BoldToggleButtonState) 
+            if (BoldToggleButtonState)
             {
                 box.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
             }
-            else 
+            else
             {
                 box.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
             }
         }
 
+        [RelayCommand]
         public void ItalicToggleClicked(RichTextBox box)
         {
             if (ItalicToggleButtonState)
@@ -271,6 +189,7 @@ namespace WPF_Notes.ViewModel
             }
         }
 
+        [RelayCommand]
         public void UnderlineToggleClicked(RichTextBox box)
         {
             if (UnderlineToggleButtonState)
@@ -283,13 +202,15 @@ namespace WPF_Notes.ViewModel
             }
         }
 
-        public void FontSizeComboBoxTextChanged(RichTextBox box) 
+        [RelayCommand]
+        private void FontSizeComboBoxTextChanged(RichTextBox box)
         {
-            if(FontSizeComboBoxSelectedItem == null) return;
+            if (FontSizeComboBoxSelectedItem == null) return;
             box.Selection.ApplyPropertyValue(Inline.FontSizeProperty, FontSizeComboBoxSelectedItem);
         }
 
-        public void FontComboBoxSelectionChanged(RichTextBox box) 
+        [RelayCommand]
+        private void FontComboBoxSelectionChanged(RichTextBox box)
         {
             if (FontComboBoxSelectedItem == null) return;
             box.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, FontComboBoxSelectedItem);

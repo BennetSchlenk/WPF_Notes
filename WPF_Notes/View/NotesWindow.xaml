@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Notes.View"
         xmlns:vm="clr-namespace:WPF_Notes.ViewModel"
-        
+        xmlns:uc="clr-namespace:WPF_Notes.View.Controls"
         mc:Ignorable="d"
         Title="NotesWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
@@ -17,10 +17,9 @@
             <MenuItem Header="File">
                 
                 <MenuItem Header="Add Notebook"
-                          Command="{Binding NewNotebookCommand}"/>
+                          Command="{Binding CreateNewNotebookCommand}"/>
                 <MenuItem Header="Add Note"
-                          Command="{Binding NewNoteCommand}"
-                          CommandParameter="{Binding SelectedNotebook}"/>
+                          Command="{Binding CreateNewNoteCommand}"/>
                 <Separator/>
                 <MenuItem Header="Exit"
                           Command="{Binding ExitApplicationCommand}"/>
@@ -43,8 +42,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    
-                    <!--<TextBlock Text="{Binding Name}"/>-->
+                    <uc:NotebookControl Notebook="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -60,26 +58,26 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Titel}"/>
+                    <uc:NoteControl/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Speech" Command="{Binding SpeechToTextToolbarCommand}"/>
+                <!--<Button Content="Speech" Command="{Binding SpeechToTextToolbarCommand}"/>-->
                 <Separator />
                 <ToggleButton Content="B" 
                               FontWeight="Bold" 
                               IsChecked="{Binding BoldToggleButtonState}" 
-                              Command="{Binding BoldTextToolbarToggleCommand}" 
+                              Command="{Binding BoldToggleClickedCommand}" 
                               CommandParameter="{Binding ElementName=RichTextBox}"/>
                 <ToggleButton Content="I" 
                               FontStyle="Italic" 
                               IsChecked="{Binding ItalicToggleButtonState}" 
-                              Command="{Binding ItalicTextToolbarToggleCommand}" 
+                              Command="{Binding ItalicToggleClickedCommand}" 
                               CommandParameter="{Binding ElementName=RichTextBox}"/>
                 <ToggleButton IsChecked="{Binding UnderlineToggleButtonState}" 
-                              Command="{Binding UnderlineTextToolbarToggleCommand}" 
+                              Command="{Binding UnderlineToggleClickedCommand}" 
                               CommandParameter="{Binding ElementName=RichTextBox}">
                     <TextBlock Text="U" TextDecorations="Underline"/>
                 </ToggleButton>
@@ -101,7 +99,7 @@
         <Grid>
             <RichTextBox x:Name="RichTextBox" 
                          TextChanged="RichTextBox_TextChanged" 
-                         SelectionChanged="RichTextBox_SelectionChanged" 
+                         SelectionChanged="RichTexBox_SelectionChanged" 
                          DataContext="{StaticResource vm}"
                          Background="#eceae4"/>
         </Grid>

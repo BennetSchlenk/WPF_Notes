@@ -27,19 +27,11 @@ namespace WPF_Notes.View
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            RichTextBox box = (RichTextBox)sender;
+            RichTextBox box = RichTextBox;
             var vm = (NotesVM)box.DataContext;
-            vm.RichTextBoxTextChangedCommand.Execute(box);
+            vm.SetStatusBarTextCommand.Execute(box);
         }
 
-        private void RichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            RichTextBox box = (RichTextBox)sender;
-            var vm = (NotesVM)box.DataContext;
-            vm.RichTextBoxSelectionChangedCommand.Execute(box);
-            
-
-        }
 
         private void ComboBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -53,6 +45,14 @@ namespace WPF_Notes.View
             RichTextBox box = RichTextBox;
             var vm = (NotesVM)box.DataContext;
             vm.FontComboBoxSelectionChangedCommand.Execute(box);
+        }
+
+        private void RichTexBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            RichTextBox box = RichTextBox;
+            var vm = (NotesVM)box.DataContext;
+            vm.SetRichtextboxFontToggleButtonsCommand.Execute(box);
+
         }
     }
 }
