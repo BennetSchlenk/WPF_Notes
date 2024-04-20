@@ -5,9 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_Notes.Controls" xmlns:viewmodel="clr-namespace:WPF_Notes.ViewModel"
              mc:Ignorable="d"
-             d:DesignHeight="40" d:DesignWidth="800">
-    <StackPanel>
-        <TextBlock  Text="{Binding Name}"/>
-        <TextBlock  Text="{Binding Id}"/>
-    </StackPanel>
+             d:DesignHeight="50" d:DesignWidth="120">
+    
+    <Grid>
+        <Border Background="White"
+                CornerRadius="7"
+            />
+        <StackPanel>
+            <TextBlock Text="{Binding Name}"
+                       Foreground="Black"
+                       Margin="5"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
 </UserControl>

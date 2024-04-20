@@ -37,6 +37,22 @@ namespace WPF_Notes.View
             RichTextBox box = (RichTextBox)sender;
             var vm = (NotesVM)box.DataContext;
             vm.RichTextBoxSelectionChangedCommand.Execute(box);
+            
+
+        }
+
+        private void ComboBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RichTextBox box = RichTextBox;
+            var vm = (NotesVM)box.DataContext;
+            vm.FontSizeComboBoxTextChangedCommand.Execute(box);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RichTextBox box = RichTextBox;
+            var vm = (NotesVM)box.DataContext;
+            vm.FontComboBoxSelectionChangedCommand.Execute(box);
         }
     }
 }

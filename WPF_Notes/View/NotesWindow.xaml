@@ -34,7 +34,13 @@
         <ListView DockPanel.Dock="Left"
                   Width="120"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
-                  ItemsSource="{Binding Notebooks}">
+                  ItemsSource="{Binding Notebooks}"
+                  Background="#cbaacb">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <uc:NotebookControl />
@@ -44,7 +50,8 @@
         </ListView>
         <ListView DockPanel.Dock="Left"
                   Width="120"
-                  ItemsSource="{Binding Notes}">
+                  ItemsSource="{Binding Notes}"
+                  Background="#abdee6">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -61,16 +68,42 @@
             <ToolBar>
                 <Button Content="Speech" Command="{Binding SpeechToTextToolbarCommand}"/>
                 <Separator />
-                <ToggleButton Content="B" FontWeight="Bold" IsChecked="{Binding BoldToggleButtonState}" Command="{Binding BoldTextToolbarToggleCommand}" CommandParameter="{Binding ElementName=RichTextBox}"/>
-                <ToggleButton Content="I" FontStyle="Italic" IsChecked="{Binding ItalicToggleButtonState}" Command="{Binding ItalicTextToolbarToggleCommand}" CommandParameter="{Binding ElementName=RichTextBox}"/>
-                <ToggleButton IsChecked="{Binding UnderlineToggleButtonState}" Command="{Binding UnderlineTextToolbarToggleCommand}" CommandParameter="{Binding ElementName=RichTextBox}">
+                <ToggleButton Content="B" 
+                              FontWeight="Bold" 
+                              IsChecked="{Binding BoldToggleButtonState}" 
+                              Command="{Binding BoldTextToolbarToggleCommand}" 
+                              CommandParameter="{Binding ElementName=RichTextBox}"/>
+                <ToggleButton Content="I" 
+                              FontStyle="Italic" 
+                              IsChecked="{Binding ItalicToggleButtonState}" 
+                              Command="{Binding ItalicTextToolbarToggleCommand}" 
+                              CommandParameter="{Binding ElementName=RichTextBox}"/>
+                <ToggleButton IsChecked="{Binding UnderlineToggleButtonState}" 
+                              Command="{Binding UnderlineTextToolbarToggleCommand}" 
+                              CommandParameter="{Binding ElementName=RichTextBox}">
                     <TextBlock Text="U" TextDecorations="Underline"/>
                 </ToggleButton>
                 <Separator />
+                <ComboBox x:Name="FontSizeComboBox"
+                          Width="50" 
+                          ItemsSource="{Binding FontSizeComboBoxItemSource}" 
+                          IsEditable="True" 
+                          SelectedItem="{Binding FontSizeComboBoxSelectedItem, UpdateSourceTrigger=PropertyChanged}" 
+                          TextBoxBase.TextChanged="ComboBox_TextChanged"/>
+                <ComboBox x:Name="FontComboBox"
+                          Width="150" 
+                          ItemsSource="{Binding FontComboBoxItemSource}" 
+                          IsEditable="False" 
+                          SelectedItem="{Binding FontComboBoxSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                          SelectionChanged="ComboBox_SelectionChanged"/>
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            <RichTextBox x:Name="RichTextBox" TextChanged="RichTextBox_TextChanged" SelectionChanged="RichTextBox_SelectionChanged" DataContext="{StaticResource vm}"/>
+            <RichTextBox x:Name="RichTextBox" 
+                         TextChanged="RichTextBox_TextChanged" 
+                         SelectionChanged="RichTextBox_SelectionChanged" 
+                         DataContext="{StaticResource vm}"
+                         Background="#eceae4"/>
         </Grid>
     </DockPanel>
 </Window>

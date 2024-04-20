@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using WPF_Notes.Model;
 using WPF_Notes.ViewModel.Commands;
 using WPF_Notes.ViewModel.Helpers;
@@ -80,6 +82,57 @@ namespace WPF_Notes.ViewModel
             }
         }
 
+        private IEnumerable fontComboBoxItemSource;
+
+        public IEnumerable FontComboBoxItemSource
+        {
+            get { return fontComboBoxItemSource; }
+            set 
+            { 
+                fontComboBoxItemSource = value;
+                OnPropertyChanged("FontComboBoxItemSource");
+            }
+        }
+
+        private object fontComboBoxSelectedItem;
+
+        public object FontComboBoxSelectedItem
+        {
+            get { return fontComboBoxSelectedItem; }
+            set 
+            { 
+                fontComboBoxSelectedItem = value;
+                OnPropertyChanged("FontComboBoxSelectedValue");
+            }
+        }
+
+
+        private IEnumerable fontSizeComboBoxItemSource;
+
+        public IEnumerable FontSizeComboBoxItemSource
+        {
+            get { return fontSizeComboBoxItemSource; }
+            set 
+            { 
+                fontSizeComboBoxItemSource = value;
+                OnPropertyChanged("FontSizeComboBoxItemSource");
+            }
+        }
+
+        private object fontSizeComboBoxSelectedItem;
+
+        public object FontSizeComboBoxSelectedItem
+        {
+            get { return fontSizeComboBoxSelectedItem; }
+            set 
+            {
+                fontSizeComboBoxSelectedItem = value;
+                OnPropertyChanged("FontSizeComboBoxSelectedValue");
+            }
+
+        }
+
+
         public NewNotebookCommand NewNotebookCommand { get; set; }
         public NewNoteCommand NewNoteCommand { get; set; }
         public ExitApplicationCommand ExitApplicationCommand { get; set; }
@@ -89,6 +142,9 @@ namespace WPF_Notes.ViewModel
         public BoldTextToolbarToggleCommand BoldTextToolbarToggleCommand { get; set; }
         public ItalicTextToolbarToggleCommand ItalicTextToolbarToggleCommand { get; set; }
         public UnderlineTextToolbarToggleCommand UnderlineTextToolbarToggleCommand { get; set; }
+        public FontSizeComboBoxTextChangedCommand FontSizeComboBoxTextChangedCommand { get; set; }
+        public FontComboBoxSelectionChangedCommand FontComboBoxSelectionChangedCommand { get; set; }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -102,10 +158,19 @@ namespace WPF_Notes.ViewModel
             BoldTextToolbarToggleCommand = new BoldTextToolbarToggleCommand(this);
             ItalicTextToolbarToggleCommand = new ItalicTextToolbarToggleCommand(this);
             UnderlineTextToolbarToggleCommand = new UnderlineTextToolbarToggleCommand(this);
+            FontSizeComboBoxTextChangedCommand = new FontSizeComboBoxTextChangedCommand(this);
+            FontComboBoxSelectionChangedCommand = new FontComboBoxSelectionChangedCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
             GetNotebooks();
+
+            var fontFamilies = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
+            FontComboBoxItemSource = fontFamilies;
+
+
+            List<double> fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+            FontSizeComboBoxItemSource = fontSizes;
         }
 
         public void CreateNewNotebook() 
@@ -159,7 +224,7 @@ namespace WPF_Notes.ViewModel
 
         private void OnPropertyChanged(string propertyName) 
         {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void SetStatusBarText(RichTextBox box) 
@@ -177,6 +242,9 @@ namespace WPF_Notes.ViewModel
             BoldToggleButtonState = (selectedWeight != DependencyProperty.UnsetValue) && selectedWeight.Equals(FontWeights.Bold);
             ItalicToggleButtonState = (selectedStyle != DependencyProperty.UnsetValue) && selectedStyle.Equals(FontStyles.Italic);
             UnderlineToggleButtonState = (selectedDecorations != DependencyProperty.UnsetValue) && selectedDecorations.Equals(TextDecorations.Underline);
+
+            FontComboBoxSelectedItem = box.Selection.GetPropertyValue(Inline.FontFamilyProperty);
+            FontSizeComboBoxSelectedItem = box.Selection.GetPropertyValue(TextElement.FontSizeProperty);
         }
 
         public void BoldToggleClicked(RichTextBox box) 
@@ -213,6 +281,18 @@ namespace WPF_Notes.ViewModel
             {
                 box.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
             }
+        }
+
+        public void FontSizeComboBoxTextChanged(RichTextBox box) 
+        {
+            if(FontSizeComboBoxSelectedItem == null) return;
+            box.Selection.ApplyPropertyValue(Inline.FontSizeProperty, FontSizeComboBoxSelectedItem);
+        }
+
+        public void FontComboBoxSelectionChanged(RichTextBox box) 
+        {
+            if (FontComboBoxSelectedItem == null) return;
+            box.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, FontComboBoxSelectedItem);
         }
     }
 }
