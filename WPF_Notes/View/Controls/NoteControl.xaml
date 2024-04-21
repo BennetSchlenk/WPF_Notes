@@ -14,12 +14,14 @@
         <StackPanel>
             <TextBlock Text="{Binding Titel}"
                        Foreground="Black"
-                       Margin="5"
+                       FontSize="13"
+                       Margin="0,5,0,0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
             <TextBlock Text="{Binding UpdatedAt}"
                        Foreground="LightGray"
-                       Margin="5"
+                       FontSize="10"
+                       Margin="0,0,0,5"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
         </StackPanel>

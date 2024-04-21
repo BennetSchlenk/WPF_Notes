@@ -14,7 +14,8 @@
         <StackPanel>
             <TextBlock Text="{Binding Name}"
                        Foreground="Black"
-                       Margin="5"
+                       Margin="7"
+                       FontSize="20"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
         </StackPanel>

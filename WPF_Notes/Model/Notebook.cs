@@ -14,5 +14,6 @@ namespace WPF_Notes.Model
         [Indexed]
         public int UserId { get; set; }
         public string Name { get; set; }
+        public string Color { get; set; }
     }
 }

@@ -33,7 +33,13 @@ namespace WPF_Notes.ViewModel
         }
 
         [ObservableProperty]
-        private string statusBarText;
+        private string statusBarNotebooksText;
+
+        [ObservableProperty]
+        private string statusBarNotesText;
+
+        [ObservableProperty]
+        private string statusBarRichTextBoxText;
 
         [ObservableProperty]
         private bool boldToggleButtonState;
@@ -121,19 +127,24 @@ namespace WPF_Notes.ViewModel
             {
                 Notebooks.Add(notebook);
             }
+
+            SetStatusBarNotebooksText(notebooks.Count);
         }
 
         private void GetNotes()
         {
             if (SelectedNotebook == null) return;
 
-            var notes = DatabaseHelper.Read<Note>().Where(n => n.NotebookId == SelectedNotebook.Id).ToList();
+            var allNotes = DatabaseHelper.Read<Note>();
+            var notes = allNotes.Where(n => n.NotebookId == SelectedNotebook.Id).ToList();
             Notes.Clear();
 
             foreach (var note in notes)
             {
                 Notes.Add(note);
             }
+
+            SetStatusBarNotesText(notes.Count, allNotes.Count);
         }
 
         private void OnPropertyChanged(string propertyName)
@@ -142,14 +153,24 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        public void SetStatusBarText(RichTextBox box)
+        private void SetStatusBarRichTextBoxText(RichTextBox box)
         {
             int charactersAmount = (new TextRange(box.Document.ContentStart, box.Document.ContentEnd)).Text.Length;
-            StatusBarText = $"Note document length: {charactersAmount} characters";
+            StatusBarRichTextBoxText = $"Note document length: {charactersAmount} characters";
+        }
+
+        private void SetStatusBarNotebooksText(int amountNotebooks)
+        {
+            StatusBarNotebooksText = $"{amountNotebooks} Notebooks";
+        }
+
+        private void SetStatusBarNotesText(int amountNotes, int totalAmountNotes)
+        {
+            StatusBarNotesText = $"{amountNotes} Notes / {totalAmountNotes} Notes Total";
         }
 
         [RelayCommand]
-        public void SetRichtextboxFontToggleButtons(RichTextBox box)
+        private void SetRichtextboxFontToggleButtons(RichTextBox box)
         {
             var selectedWeight = box.Selection.GetPropertyValue(TextElement.FontWeightProperty);
             var selectedStyle = box.Selection.GetPropertyValue(TextElement.FontStyleProperty);
@@ -164,7 +185,7 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        public void BoldToggleClicked(RichTextBox box)
+        private void BoldToggleClicked(RichTextBox box)
         {
             if (BoldToggleButtonState)
             {
@@ -177,7 +198,7 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        public void ItalicToggleClicked(RichTextBox box)
+        private void ItalicToggleClicked(RichTextBox box)
         {
             if (ItalicToggleButtonState)
             {
@@ -190,7 +211,7 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        public void UnderlineToggleClicked(RichTextBox box)
+        private void UnderlineToggleClicked(RichTextBox box)
         {
             if (UnderlineToggleButtonState)
             {

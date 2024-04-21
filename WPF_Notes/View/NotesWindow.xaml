@@ -7,37 +7,54 @@
         xmlns:vm="clr-namespace:WPF_Notes.ViewModel"
         xmlns:uc="clr-namespace:WPF_Notes.View.Controls"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="800"
+        Title="NotesWindow" Height="550" Width="950"
+        MinHeight="550" MinWidth="950"
+        WindowStyle="None"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
     </Window.Resources>
-    <DockPanel DataContext="{StaticResource vm}">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="File">
-                
-                <MenuItem Header="Add Notebook"
-                          Command="{Binding CreateNewNotebookCommand}"/>
-                <MenuItem Header="Add Note"
-                          Command="{Binding CreateNewNoteCommand}"/>
-                <Separator/>
-                <MenuItem Header="Exit"
-                          Command="{Binding ExitApplicationCommand}"/>
-            </MenuItem>
-        </Menu>
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
-                <TextBlock Text="{Binding StatusBarText}"/>
-            </StatusBarItem>
-        </StatusBar>
-        <ListView DockPanel.Dock="Left"
-                  Width="120"
-                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
-                  ItemsSource="{Binding Notebooks}"
-                  Background="#cbaacb">
+    <Grid DataContext="{StaticResource vm}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="150" MaxWidth="200"/>
+            <ColumnDefinition Width="*" MinWidth="150" MaxWidth="200"/>
+            <ColumnDefinition Width="3*" MinWidth="360"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" MinHeight="25" MaxHeight="30"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="*" MinHeight="25" MaxHeight="30"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#84B8FF">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Notebooks" 
+                   Grid.Column="0"
+                   Grid.ColumnSpan="4"
+                   Margin="5,0,0,0"/>
+            <Button Grid.Column="5"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding CreateNewNotebookCommand}">
+                <Image Source="../Assets/add_symbol.png" 
+                       Width="20" Height="20"/>
+            </Button>
+        </Grid>
+            <ListView Grid.Row="1"
+                      SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
+                      ItemsSource="{Binding Notebooks}"
+                      Background="#C0DBFF"
+                      BorderThickness="0">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Margin" Value="0,5,0,5"/>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
@@ -46,10 +63,34 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView DockPanel.Dock="Left"
-                  Width="120"
+        <Grid Grid.Row="0" 
+              Grid.Column="1"
+              Background="{Binding SelectedNotebook.Color}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Notes" 
+                   Grid.Column="0"
+                   Grid.ColumnSpan="4"
+                   Margin="5,0,0,0"/>
+            <Button Grid.Column="5"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding CreateNewNoteCommand}">
+                <Image Source="../Assets/add_symbol.png"
+                       Width="20" Height="20"/>
+            </Button>
+        </Grid>
+        <ListView Grid.Row="1"
+                  Grid.Column="1"
                   ItemsSource="{Binding Notes}"
-                  Background="#abdee6">
+                  Background="{Binding SelectedNotebook.Color}"
+                  BorderThickness="0">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -62,7 +103,9 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ToolBarTray DockPanel.Dock="Top">
+        <ToolBarTray Grid.Row="0"
+                     Grid.Column="2"
+                     VerticalAlignment="Center">
             <ToolBar>
                 <!--<Button Content="Speech" Command="{Binding SpeechToTextToolbarCommand}"/>-->
                 <Separator />
@@ -96,12 +139,34 @@
                           SelectionChanged="ComboBox_SelectionChanged"/>
             </ToolBar>
         </ToolBarTray>
-        <Grid>
+        <Grid Grid.Row="1"
+              Grid.Column="2">
             <RichTextBox x:Name="RichTextBox" 
                          TextChanged="RichTextBox_TextChanged" 
                          SelectionChanged="RichTexBox_SelectionChanged" 
                          DataContext="{StaticResource vm}"
-                         Background="#eceae4"/>
+                         Background="White"/>
         </Grid>
-    </DockPanel>
+        <StatusBar Grid.Row="2" 
+                   Grid.Column="0"
+                   Background="#84B8FF">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusBarNotebooksText}"/>
+            </StatusBarItem>
+        </StatusBar>
+        <StatusBar Grid.Row="2" 
+                   Grid.Column="1"
+                   Background="{Binding SelectedNotebook.Color}">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusBarNotesText}"/>
+            </StatusBarItem>
+        </StatusBar>
+        <StatusBar Grid.Row="2" 
+                   Grid.Column="2"
+                   Background="White">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusBarRichTextBoxText}"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </Window>

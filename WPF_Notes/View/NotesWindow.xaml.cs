@@ -29,7 +29,7 @@ namespace WPF_Notes.View
         {
             RichTextBox box = RichTextBox;
             var vm = (NotesVM)box.DataContext;
-            vm.SetStatusBarTextCommand.Execute(box);
+            vm.SetStatusBarRichTextBoxTextCommand.Execute(box);
         }
 
 
