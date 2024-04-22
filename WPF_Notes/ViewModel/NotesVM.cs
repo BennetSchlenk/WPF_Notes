@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using WPF_Notes.Model;
+using WPF_Notes.View;
 using WPF_Notes.ViewModel.Commands;
 using WPF_Notes.ViewModel.Helpers;
 
@@ -80,18 +81,25 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        private void CreateNewNotebook()
+        private void OpenNewNotebookWindow()
         {
-            Notebook newNotebook = new Notebook()
-            {
-                Name = "New Notebook"
-            };
+            CreateNotebookWindow detailWindow = new CreateNotebookWindow();
+            detailWindow.ShowDialog();
 
-            DatabaseHelper.Insert(newNotebook);
             GetNotebooks();
         }
 
-        
+        [RelayCommand]
+        private void OpenEditNotebookWindow(Notebook notebook)
+        {
+            SelectedNotebook = notebook;
+            EditNotebookWindow editWindow = new EditNotebookWindow(SelectedNotebook);
+            editWindow.ShowDialog();
+
+            GetNotebooks();
+        }
+
+
         private bool CanExecuteNewNote() 
         {
             return SelectedNotebook != null;

@@ -9,12 +9,12 @@
         mc:Ignorable="d"
         Title="NotesWindow" Height="550" Width="950"
         MinHeight="550" MinWidth="950"
-        WindowStyle="None"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
     </Window.Resources>
-    <Grid DataContext="{StaticResource vm}">
+    <Grid DataContext="{StaticResource vm}"
+          x:Name="ContextGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="150" MaxWidth="200"/>
             <ColumnDefinition Width="*" MinWidth="150" MaxWidth="200"/>
@@ -41,12 +41,12 @@
             <Button Grid.Column="5"
                     Background="Transparent"
                     BorderThickness="0"
-                    Command="{Binding CreateNewNotebookCommand}">
+                    Command="{Binding OpenNewNotebookWindowCommand}">
                 <Image Source="../Assets/add_symbol.png" 
                        Width="20" Height="20"/>
             </Button>
         </Grid>
-            <ListView Grid.Row="1"
+        <ListView Grid.Row="1"
                       SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
                       ItemsSource="{Binding Notebooks}"
                       Background="#C0DBFF"
@@ -59,7 +59,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:NotebookControl Notebook="{Binding}"/>
+                    <uc:NotebookControl EditCommand="{Binding DataContext.OpenEditNotebookWindowCommand, ElementName=ContextGrid}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -107,7 +107,6 @@
                      Grid.Column="2"
                      VerticalAlignment="Center">
             <ToolBar>
-                <!--<Button Content="Speech" Command="{Binding SpeechToTextToolbarCommand}"/>-->
                 <Separator />
                 <ToggleButton Content="B" 
                               FontWeight="Bold" 

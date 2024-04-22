@@ -5,19 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_Notes.View.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="120">
+             d:DesignHeight="50" d:DesignWidth="150">
 
     <Grid>
-        <Border Background="White"
-                CornerRadius="7"
-            />
-        <StackPanel>
+        <Border Background="{Binding Color}"
+                CornerRadius="7"/>
+        <Grid VerticalAlignment="Center">
             <TextBlock Text="{Binding Name}"
                        Foreground="Black"
                        Margin="7"
                        FontSize="20"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        VerticalAlignment="Center"/>
-        </StackPanel>
+            <Button x:Name="EditNotebookButton"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    HorizontalAlignment="Right"
+                    Click="EditNotebookButton_Click">
+                <Image Source="../../Assets/edit_symbol.png" Width="15" Height="15"/>
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

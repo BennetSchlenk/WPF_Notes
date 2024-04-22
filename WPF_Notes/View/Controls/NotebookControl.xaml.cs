@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,9 +38,32 @@ namespace WPF_Notes.View.Controls
             if (notebookControl == null) return;
             notebookControl.DataContext = notebookControl.Notebook;
         }
+
+
+
+        public ICommand EditCommand
+        {
+            get { return (ICommand)GetValue(EditCommandProperty); }
+            set { SetValue(EditCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EditCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EditCommandProperty =
+            DependencyProperty.Register("EditCommand", typeof(ICommand), typeof(NotebookControl), new PropertyMetadata(null));
+
+
+
         public NotebookControl()
         {
             InitializeComponent();
+            EditNotebookButton.Command = EditCommand;
+            
+        }
+
+        private void EditNotebookButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button but = (Button)sender;
+            EditCommand.Execute(but.DataContext);
         }
     }
 }
