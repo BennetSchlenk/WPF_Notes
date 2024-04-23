@@ -28,7 +28,7 @@ namespace WPF_Notes.View.Controls
         }
 
         public static readonly DependencyProperty NoteProperty =
-            DependencyProperty.Register("Notebook", typeof(Note), typeof(NoteControl), new PropertyMetadata(null, SetValues));
+            DependencyProperty.Register("Note", typeof(Note), typeof(NoteControl), new PropertyMetadata(null, SetValues));
 
         private static void SetValues(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -37,9 +37,28 @@ namespace WPF_Notes.View.Controls
             if (noteControl == null) return;
             noteControl.DataContext = noteControl.Note;
         }
+
+        public ICommand EditNoteCommand
+        {
+            get { return (ICommand)GetValue(EditNoteCommandProperty); }
+            set { SetValue(EditNoteCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EditCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EditNoteCommandProperty =
+            DependencyProperty.Register("EditNoteCommand", typeof(ICommand), typeof(NoteControl), new PropertyMetadata(null));
+
+
         public NoteControl()
         {
             InitializeComponent();
+            EditNoteButton.Command = EditNoteCommand;
+        }
+
+        private void EditNoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button but = (Button)sender;
+            EditNoteCommand.Execute(but.DataContext);
         }
     }
 }

@@ -17,14 +17,14 @@ using WPF_Notes.ViewModel;
 namespace WPF_Notes.View
 {
     /// <summary>
-    /// Interaction logic for EditNotebookWindow.xaml
+    /// Interaction logic for CreateNoteWindow.xaml
     /// </summary>
-    public partial class EditNotebookWindow : Window
+    public partial class CreateNoteWindow : Window
     {
-        public EditNotebookWindow(Notebook notebook)
+        public CreateNoteWindow(Notebook notebook)
         {
             InitializeComponent();
-            DataContext = new EditNotebookVM(notebook);
+            DataContext = new CreateNoteVM(notebook);
         }
     }
 }

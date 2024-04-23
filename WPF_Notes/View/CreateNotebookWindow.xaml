@@ -38,7 +38,7 @@
             <Label Content="Name:"
                    HorizontalAlignment="Left"/>
             <TextBox Margin="5,10,0,0"
-                     Text="{Binding NotebookNameText}"/>
+                     Text="{Binding NotebookName}"/>
         </StackPanel>
         <StackPanel Grid.Row="1"
                     Grid.Column="2"
@@ -49,7 +49,7 @@
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"/>
             <TextBox Margin="5,10,0,0"
-                     Text="{Binding NotebookColorText}"/>
+                     Text="{Binding NotebookColor}"/>
         </StackPanel>
         <Button Content="OK" 
                 Width="100"

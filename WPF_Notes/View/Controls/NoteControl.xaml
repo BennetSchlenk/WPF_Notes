@@ -11,19 +11,38 @@
         <Border Background="White"
                 CornerRadius="7"
             />
-        <StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.15*"/>
+            </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding Titel}"
+                       Grid.Row="0"
                        Foreground="Black"
                        FontSize="13"
                        Margin="0,5,0,0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
             <TextBlock Text="{Binding UpdatedAt}"
+                       Grid.Row="1"
                        Foreground="LightGray"
                        FontSize="10"
                        Margin="0,0,0,5"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
-        </StackPanel>
+            <Button x:Name="EditNoteButton"
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    HorizontalAlignment="Right"
+                    Click="EditNoteButton_Click">
+                <Image Source="../../Assets/edit_symbol.png" Width="15" Height="15"/>
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

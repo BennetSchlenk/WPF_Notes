@@ -16,7 +16,8 @@
                        Margin="7"
                        FontSize="20"
                        HorizontalAlignment="Left"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"/>
             <Button x:Name="EditNotebookButton"
                     BorderThickness="0"
                     Background="Transparent"

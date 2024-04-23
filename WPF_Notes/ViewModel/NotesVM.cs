@@ -26,11 +26,19 @@ namespace WPF_Notes.ViewModel
 
 
       
-        [ObservableProperty,NotifyCanExecuteChangedFor(nameof(CreateNewNoteCommand))]
+        [ObservableProperty,NotifyCanExecuteChangedFor(nameof(OpenNewNoteWindowCommand))]
         private Notebook selectedNotebook;
         partial void OnSelectedNotebookChanged(Notebook value)
         {
             GetNotes();
+        }
+
+        [ObservableProperty]
+        private Note selectedNote;
+
+        partial void OnSelectedNoteChanged(Note? oldValue, Note newValue)
+        {
+            EvaluateSelectedNoteChange(oldValue, newValue);
         }
 
         [ObservableProperty]
@@ -97,28 +105,54 @@ namespace WPF_Notes.ViewModel
             editWindow.ShowDialog();
 
             GetNotebooks();
+            SelectedNotebook = notebook;
         }
 
-
-        private bool CanExecuteNewNote() 
+        private bool CanExecuteNewNoteWindow()
         {
             return SelectedNotebook != null;
         }
 
-        [RelayCommand(CanExecute = nameof(CanExecuteNewNote))]
-        private void CreateNewNote()
+        [RelayCommand(CanExecute = nameof(CanExecuteNewNoteWindow))]
+        private void OpenNewNoteWindow()
         {
-            Note newNote = new Note()
-            {
-                NotebookId = SelectedNotebook.Id,
-                Titel = "New Note",
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
+            CreateNoteWindow detailWindow = new CreateNoteWindow(SelectedNotebook);
+            detailWindow.ShowDialog();
 
-            DatabaseHelper.Insert(newNote);
             GetNotes();
         }
+
+        [RelayCommand]
+        private void OpenEditNoteWindow(Note note)
+        {
+            SelectedNote = note;
+            EditNoteWindow editWindow = new EditNoteWindow(SelectedNote);
+            editWindow.ShowDialog();
+
+            GetNotes();
+            SelectedNote = note;
+        }
+
+
+        //private bool CanExecuteNewNote() 
+        //{
+        //    return SelectedNotebook != null;
+        //}
+
+        //[RelayCommand(CanExecute = nameof(CanExecuteNewNote))]
+        //private void CreateNewNote()
+        //{
+        //    Note newNote = new Note()
+        //    {
+        //        NotebookId = SelectedNotebook.Id,
+        //        Titel = "New Note",
+        //        CreatedAt = DateTime.Now,
+        //        UpdatedAt = DateTime.Now
+        //    };
+
+        //    DatabaseHelper.Insert(newNote);
+        //    GetNotes();
+        //}
 
         [RelayCommand]
         private void ExitApplication() 
@@ -154,6 +188,12 @@ namespace WPF_Notes.ViewModel
 
             SetStatusBarNotesText(notes.Count, allNotes.Count);
         }
+
+        private void EvaluateSelectedNoteChange(Note? oldValue, Note newValue) 
+        {
+        
+        }
+
 
         private void OnPropertyChanged(string propertyName)
         {

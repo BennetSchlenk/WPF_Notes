@@ -37,8 +37,8 @@ namespace WPF_Notes.ViewModel
         {
             EditNotebookWindow editWindow = (EditNotebookWindow)window;
 
-            selectedNoteBook.Name = notebookName;
-            selectedNoteBook.Color = notebookColor;
+            selectedNoteBook.Name = NotebookName;
+            selectedNoteBook.Color = NotebookColor;
 
             DatabaseHelper.Update(selectedNoteBook);
 

@@ -14,19 +14,19 @@ namespace WPF_Notes.ViewModel
     internal partial class CreateNotebookVM : ObservableObject
     {
         [ObservableProperty]
-        private string? notebookNameText;
+        private string? notebookName;
 
         [ObservableProperty]
-        private string? notebookColorText;
+        private string? notebookColor;
 
         [RelayCommand]
         private void CreateNewNotebook(Window window)
         {
-            if (NotebookColorText == null || NotebookNameText == null) return;
+            if (NotebookColor == null || NotebookName == null) return;
             Notebook newNotebook = new Notebook()
             {
-                Name = NotebookNameText,
-                Color = NotebookColorText
+                Name = NotebookName,
+                Color = NotebookColor
             };
 
             DatabaseHelper.Insert(newNotebook);

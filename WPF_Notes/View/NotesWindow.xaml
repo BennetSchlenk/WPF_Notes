@@ -59,7 +59,9 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:NotebookControl EditCommand="{Binding DataContext.OpenEditNotebookWindowCommand, ElementName=ContextGrid}"/>
+                    <uc:NotebookControl EditCommand="{Binding DataContext.OpenEditNotebookWindowCommand, ElementName=ContextGrid}" 
+                                        MinWidth="150" 
+                                        MaxWidth="200"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -81,7 +83,7 @@
             <Button Grid.Column="5"
                     Background="Transparent"
                     BorderThickness="0"
-                    Command="{Binding CreateNewNoteCommand}">
+                    Command="{Binding OpenNewNoteWindowCommand}">
                 <Image Source="../Assets/add_symbol.png"
                        Width="20" Height="20"/>
             </Button>
@@ -89,6 +91,7 @@
         <ListView Grid.Row="1"
                   Grid.Column="1"
                   ItemsSource="{Binding Notes}"
+                  SelectedValue="{Binding SelectedNote}"
                   Background="{Binding SelectedNotebook.Color}"
                   BorderThickness="0">
             <ListView.ItemContainerStyle>
@@ -99,7 +102,9 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:NoteControl/>
+                    <uc:NoteControl EditNoteCommand="{Binding DataContext.OpenEditNoteWindowCommand, ElementName=ContextGrid}" 
+                                        MinWidth="150" 
+                                        MaxWidth="200"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
