@@ -43,5 +43,11 @@ namespace WPF_Notes.ViewModel
 
             window.Close();
         }
+
+        [RelayCommand]
+        private void CloseWindow(Window window)
+        {
+            window.Close();
+        }
     }
 }

@@ -32,16 +32,24 @@ namespace WPF_Notes.ViewModel
         private Notebook selectedNotebook;
         partial void OnSelectedNotebookChanged(Notebook value)
         {
-            GetNotes();
+            if(SelectedNotebook == null) 
+            {
+                if (Notebooks.Count > 0)
+                {
+                    SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
+                    GetNotes();
+                }
+            }
+            else 
+            {
+                GetNotes();
+            }
+ 
+
         }
 
         [ObservableProperty]
         private Note selectedNote;
-
-        partial void OnSelectedNoteChanged(Note? oldValue, Note newValue)
-        {
-            //valuateSelectedNoteChange(oldValue, newValue);
-        }
 
         [ObservableProperty]
         private string statusBarNotebooksText;
@@ -99,6 +107,7 @@ namespace WPF_Notes.ViewModel
             detailWindow.ShowDialog();
 
             GetNotebooks();
+            SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
         }
 
         [RelayCommand]

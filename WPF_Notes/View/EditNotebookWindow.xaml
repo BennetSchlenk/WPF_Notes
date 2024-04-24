@@ -8,65 +8,91 @@
         xmlns:local="clr-namespace:WPF_Notes.View"
         mc:Ignorable="d"
         Title="EditNotebookWindow" Height="200" Width="400"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
         WindowStartupLocation="CenterScreen">
+
     <Window.DataContext>
         <vm:EditNotebookVM/>
     </Window.DataContext>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="0.5*"/>
-        </Grid.RowDefinitions>
-        <Label Content="Edit Notebook"
-               Grid.ColumnSpan="3"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"/>
-        <StackPanel Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Grid.RowSpan="2"
-                    Margin="5">
-            <Label Content="Name:"
-                   HorizontalAlignment="Left"/>
-            <TextBox Margin="5,10,0,0"
-                     Text="{Binding NotebookName}"/>
-        </StackPanel>
-        <StackPanel Grid.Row="1"
+    <Border BorderThickness="1" 
+            BorderBrush="LightGray" 
+            CornerRadius="20" 
+            Background="GhostWhite">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Edit Notebook"
+                   Grid.ColumnSpan="3"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold"
+                   FontSize="15"/>
+            <Button Background="Transparent"
+                    BorderThickness="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     Grid.Column="2"
-                    Grid.RowSpan="2"
-                    VerticalAlignment="Top"
-                    Margin="5">
-            <Label Content="Hex Color:"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"/>
-            <TextBox Margin="5,10,0,0"
-                     Text="{Binding NotebookColor}"/>
-        </StackPanel>
-        <Button Content="OK" 
-                Width="100"
-                Grid.Row="3"
-                Command="{Binding EditNotebookCommand}"
-                CommandParameter="{Binding ElementName=EditNotebooksWindow}"/>
-        <Button Content="Delete" 
-                Width="100"
-                Grid.Row="3"
-                Grid.Column="1"
-                Command="{Binding DeleteNotebookCommand}"
-                CommandParameter="{Binding ElementName=EditNotebooksWindow}"/>
-        <Button Content="Cancel"
-                IsCancel="True"
-                Width="100"
-                Grid.Row="3"
-                Grid.Column="2"/>
-
-
-    </Grid>
+                    Margin="0,0,10,0"
+                    Command="{Binding CloseWindowCommand}"
+                    CommandParameter="{Binding ElementName=EditNotebooksWindow}">
+                <Image Source="../Assets/close_symbol.png" Width="20" Height="20"/>
+            </Button>
+            <StackPanel Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Grid.RowSpan="2"
+                        Margin="5">
+                <Label Content="Name:"
+                       Margin="5,0,0,0"
+                       HorizontalAlignment="Left"/>
+                <TextBox Margin="10,0,0,0"
+                         Text="{Binding NotebookName}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1"
+                        Grid.Column="2"
+                        Grid.RowSpan="2"
+                        VerticalAlignment="Top"
+                        Margin="5">
+                <Label Content="Hex Color:"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>
+                <TextBox Margin="5,0,10,0"
+                         Text="{Binding NotebookColor}"/>
+            </StackPanel>
+            <Button Content="OK" 
+                    Width="100"
+                    Grid.Row="3"
+                    Background="LightBlue"
+                    BorderThickness="0"
+                    Command="{Binding EditNotebookCommand}"
+                    CommandParameter="{Binding ElementName=EditNotebooksWindow}"/>
+            <Button Content="Delete" 
+                    Width="100"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Background="PaleVioletRed"
+                    BorderThickness="0"
+                    Command="{Binding DeleteNotebookCommand}"
+                    CommandParameter="{Binding ElementName=EditNotebooksWindow}"/>
+            <Button Content="Cancel"
+                    IsCancel="True"
+                    Width="100"
+                    Background="LightGray"
+                    BorderThickness="0"
+                    Grid.Row="3"
+                    Grid.Column="2"/>
+        </Grid>
+    </Border>
 </Window>

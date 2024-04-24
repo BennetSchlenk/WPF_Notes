@@ -26,11 +26,18 @@ namespace WPF_Notes.ViewModel
             Notebook newNotebook = new Notebook()
             {
                 Name = NotebookName,
+                CreatedAt = DateTime.Now,
                 Color = NotebookColor
             };
 
             DatabaseHelper.Insert(newNotebook);
 
+            window.Close();
+        }
+
+        [RelayCommand]
+        private void CloseWindow(Window window) 
+        {
             window.Close();
         }
     }

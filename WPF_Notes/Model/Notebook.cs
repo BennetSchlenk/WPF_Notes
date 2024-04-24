@@ -15,6 +15,7 @@ namespace WPF_Notes.Model
         public int UserId { get; set; }
         [MaxLength(20)]
         public string Name { get; set; }
+        public DateTime CreatedAt { get; set; }
         [MaxLength(7)]
         public string Color { get; set; }
     }

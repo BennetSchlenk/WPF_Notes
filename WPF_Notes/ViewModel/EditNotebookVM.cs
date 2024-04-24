@@ -55,12 +55,21 @@ namespace WPF_Notes.ViewModel
 
             foreach (var note in notes)
             {
-                File.Delete(note.FileLocation);
+                if (!string.IsNullOrEmpty(note.FileLocation)) 
+                {
+                    File.Delete(note.FileLocation);
+                }
                 DatabaseHelper.Delete(note);
             }
 
             DatabaseHelper.Delete(selectedNoteBook);
 
+            window.Close();
+        }
+
+        [RelayCommand]
+        private void CloseWindow(Window window)
+        {
             window.Close();
         }
     }
