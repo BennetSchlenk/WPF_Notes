@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,23 @@ namespace WPF_Notes.ViewModel
 
             DatabaseHelper.Update(selectedNoteBook);
 
+
+            window.Close();
+        }
+
+        [RelayCommand]
+        private void DeleteNotebook(Window window)
+        {
+            var allNotesOfSelectedNotebook = DatabaseHelper.Read<Note>().Where(n => n.NotebookId == selectedNoteBook.Id).ToList();
+            var notes = allNotesOfSelectedNotebook;
+
+            foreach (var note in notes)
+            {
+                File.Delete(note.FileLocation);
+                DatabaseHelper.Delete(note);
+            }
+
+            DatabaseHelper.Delete(selectedNoteBook);
 
             window.Close();
         }

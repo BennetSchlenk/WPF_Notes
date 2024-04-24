@@ -45,6 +45,12 @@
                 Grid.Row="3"
                 Command="{Binding EditNoteCommand}"
                 CommandParameter="{Binding ElementName=EditNotesWindow}"/>
+        <Button Content="Delete" 
+                Width="100"
+                Grid.Row="3"
+                Grid.Column="1"
+                Command="{Binding DeleteNoteCommand}"
+                CommandParameter="{Binding ElementName=EditNotesWindow}"/>
         <Button Content="Cancel"
                 IsCancel="True"
                 Width="100"

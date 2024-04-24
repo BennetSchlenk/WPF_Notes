@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,15 @@ namespace WPF_Notes.ViewModel
             selectedNote.UpdatedAt = DateTime.Now;
 
             DatabaseHelper.Update(selectedNote);
+
+            window.Close();
+        }
+
+        [RelayCommand]
+        private void DeleteNote(Window window) 
+        {
+            File.Delete(selectedNote.FileLocation);
+            DatabaseHelper.Delete(selectedNote);
 
             window.Close();
         }
