@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPF_Notes.Model;
 using WPF_Notes.ViewModel;
 
 namespace WPF_Notes.View
@@ -53,6 +54,35 @@ namespace WPF_Notes.View
             var vm = (NotesVM)box.DataContext;
             vm.SetRichtextboxFontToggleButtonsCommand.Execute(box);
 
+        }
+
+        private void NoteListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RichTextBox box = RichTextBox;
+            var vm = (NotesVM)box.DataContext;
+
+            if (e.AddedItems.Count == 0) return;
+
+            Note newNote = e.AddedItems[0] as Note;
+            Note? oldNote = (e.RemovedItems.Count == 0) ? null : e.RemovedItems[0] as Note;
+
+            //if(oldNote != null) 
+            //{
+            //    MessageBox.Show($"new: {newNote.Titel} // old: {oldNote.Titel}");
+            //}
+            //else 
+            //{
+            //    MessageBox.Show($"new: {newNote.Titel} // old: None was previously selected");
+            //}
+
+            NoteSelectionChangedCommandWrapper objectWrapper = new NoteSelectionChangedCommandWrapper()
+            {
+                RichTextBox = box,
+                oldValue = oldNote,
+                newValue = newNote
+            };
+
+            vm.EvaluateSelectedNoteChangeCommand.Execute(objectWrapper);
         }
     }
 }

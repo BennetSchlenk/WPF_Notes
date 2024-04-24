@@ -47,10 +47,12 @@
             </Button>
         </Grid>
         <ListView Grid.Row="1"
-                      SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
-                      ItemsSource="{Binding Notebooks}"
-                      Background="#C0DBFF"
-                      BorderThickness="0">
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
+                  ItemsSource="{Binding Notebooks}"
+                  Background="#C0DBFF"
+                  BorderThickness="0"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -92,8 +94,11 @@
                   Grid.Column="1"
                   ItemsSource="{Binding Notes}"
                   SelectedValue="{Binding SelectedNote}"
+                  SelectionChanged="NoteListView_SelectionChanged"
                   Background="{Binding SelectedNotebook.Color}"
-                  BorderThickness="0">
+                  BorderThickness="0"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -145,7 +150,7 @@
         </ToolBarTray>
         <Grid Grid.Row="1"
               Grid.Column="2">
-            <RichTextBox x:Name="RichTextBox" 
+            <RichTextBox x:Name="RichTextBox"  
                          TextChanged="RichTextBox_TextChanged" 
                          SelectionChanged="RichTexBox_SelectionChanged" 
                          DataContext="{StaticResource vm}"

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using WPF_Notes.Model;
 using WPF_Notes.View;
 using WPF_Notes.ViewModel.Commands;
@@ -38,7 +40,7 @@ namespace WPF_Notes.ViewModel
 
         partial void OnSelectedNoteChanged(Note? oldValue, Note newValue)
         {
-            EvaluateSelectedNoteChange(oldValue, newValue);
+            //valuateSelectedNoteChange(oldValue, newValue);
         }
 
         [ObservableProperty]
@@ -70,6 +72,8 @@ namespace WPF_Notes.ViewModel
 
         [ObservableProperty]
         private object fontSizeComboBoxSelectedItem;
+
+
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -120,6 +124,8 @@ namespace WPF_Notes.ViewModel
             detailWindow.ShowDialog();
 
             GetNotes();
+            //Note must have at least one entry since we just created a note
+            SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
         }
 
         [RelayCommand]
@@ -132,27 +138,6 @@ namespace WPF_Notes.ViewModel
             GetNotes();
             SelectedNote = note;
         }
-
-
-        //private bool CanExecuteNewNote() 
-        //{
-        //    return SelectedNotebook != null;
-        //}
-
-        //[RelayCommand(CanExecute = nameof(CanExecuteNewNote))]
-        //private void CreateNewNote()
-        //{
-        //    Note newNote = new Note()
-        //    {
-        //        NotebookId = SelectedNotebook.Id,
-        //        Titel = "New Note",
-        //        CreatedAt = DateTime.Now,
-        //        UpdatedAt = DateTime.Now
-        //    };
-
-        //    DatabaseHelper.Insert(newNote);
-        //    GetNotes();
-        //}
 
         [RelayCommand]
         private void ExitApplication() 
@@ -189,9 +174,56 @@ namespace WPF_Notes.ViewModel
             SetStatusBarNotesText(notes.Count, allNotes.Count);
         }
 
-        private void EvaluateSelectedNoteChange(Note? oldValue, Note newValue) 
+        [RelayCommand]
+        private void EvaluateSelectedNoteChange(NoteSelectionChangedCommandWrapper wrapper) 
         {
-        
+            if (wrapper.oldValue == null)
+            {
+                //MessageBox.Show($"new: {wrapper.newValue.Titel}   old: No Note was Selected   selectedNote:{SelectedNote.Titel}");
+                LoadNoteText(wrapper.newValue, wrapper.RichTextBox);
+            }
+            else
+            {
+                //MessageBox.Show($"new: {wrapper.newValue.Titel} old: {wrapper.oldValue.Titel}    selectedNote:{SelectedNote.Titel}");
+                SaveNoteText(wrapper.oldValue, wrapper.RichTextBox);
+                LoadNoteText(wrapper.newValue, wrapper.RichTextBox);
+            }
+
+        }
+
+        private void LoadNoteText(Note note, RichTextBox box) 
+        {
+            box.Document.Blocks.Clear();
+            if (!string.IsNullOrEmpty(note.FileLocation) && note == SelectedNote) 
+            {
+                FileStream fileStream = new FileStream(note.FileLocation, FileMode.Open);
+                var content = new TextRange(box.Document.ContentStart, box.Document.ContentEnd);
+
+                content.Load(fileStream, DataFormats.Rtf);
+                fileStream.Close();
+            }
+        }
+
+        private void SaveNoteText(Note note, RichTextBox box)
+        {
+            string folderPath = Environment.CurrentDirectory + "/NoteFolder/";
+            string rtfFile = System.IO.Path.Combine(folderPath, $"{note.Id}.rtf");
+
+            if (!Directory.Exists(folderPath)) 
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            note.FileLocation = rtfFile;
+            DatabaseHelper.Update(note);
+
+            FileStream fileStream = new FileStream(rtfFile, FileMode.Create);
+
+            var content = new TextRange(box.Document.ContentStart, box.Document.ContentEnd);
+
+            content.Save(fileStream, DataFormats.Rtf);
+
+            fileStream.Close();
         }
 
 
@@ -202,7 +234,7 @@ namespace WPF_Notes.ViewModel
 
         [RelayCommand]
         private void SetStatusBarRichTextBoxText(RichTextBox box)
-        {
+        { 
             int charactersAmount = (new TextRange(box.Document.ContentStart, box.Document.ContentEnd)).Text.Length;
             StatusBarRichTextBoxText = $"Note document length: {charactersAmount} characters";
         }
