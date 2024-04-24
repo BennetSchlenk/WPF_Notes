@@ -27,12 +27,12 @@ namespace WPF_Notes.ViewModel
         public ObservableCollection<Note> Notes { get; set; }
 
 
-      
-        [ObservableProperty,NotifyCanExecuteChangedFor(nameof(OpenNewNoteWindowCommand))]
+
+        [ObservableProperty, NotifyCanExecuteChangedFor(nameof(OpenNewNoteWindowCommand))]
         private Notebook selectedNotebook;
         partial void OnSelectedNotebookChanged(Notebook value)
         {
-            if(SelectedNotebook == null) 
+            if (SelectedNotebook == null)
             {
                 if (Notebooks.Count > 0)
                 {
@@ -40,11 +40,11 @@ namespace WPF_Notes.ViewModel
                     GetNotes();
                 }
             }
-            else 
+            else
             {
                 GetNotes();
             }
- 
+
 
         }
 
@@ -92,6 +92,12 @@ namespace WPF_Notes.ViewModel
             Notes = new ObservableCollection<Note>();
             GetNotebooks();
 
+            if (Notebooks.Count > 0)
+            {
+                SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
+            }
+
+
             var fontFamilies = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
             FontComboBoxItemSource = fontFamilies;
 
@@ -118,7 +124,17 @@ namespace WPF_Notes.ViewModel
             editWindow.ShowDialog();
 
             GetNotebooks();
-            SelectedNotebook = notebook;
+            if (Notebooks.Contains(notebook))
+            {
+                SelectedNotebook = notebook;
+            }
+            else 
+            {
+                if (Notebooks.Count > 0)
+                {
+                    SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
+                }
+            }
         }
 
         private bool CanExecuteNewNoteWindow()
@@ -149,7 +165,7 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        private void ExitApplication() 
+        private void ExitApplication()
         {
             Application.Current.Shutdown();
         }
@@ -184,7 +200,7 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        private void EvaluateSelectedNoteChange(NoteSelectionChangedCommandWrapper wrapper) 
+        private void EvaluateSelectedNoteChange(NoteSelectionChangedCommandWrapper wrapper)
         {
             if (wrapper.oldValue == null)
             {
@@ -200,10 +216,10 @@ namespace WPF_Notes.ViewModel
 
         }
 
-        private void LoadNoteText(Note note, RichTextBox box) 
+        private void LoadNoteText(Note note, RichTextBox box)
         {
             box.Document.Blocks.Clear();
-            if (!string.IsNullOrEmpty(note.FileLocation) && note == SelectedNote) 
+            if (!string.IsNullOrEmpty(note.FileLocation) && note == SelectedNote)
             {
                 FileStream fileStream = new FileStream(note.FileLocation, FileMode.Open);
                 var content = new TextRange(box.Document.ContentStart, box.Document.ContentEnd);
@@ -218,7 +234,7 @@ namespace WPF_Notes.ViewModel
             string folderPath = Environment.CurrentDirectory + "/NoteFolder/";
             string rtfFile = System.IO.Path.Combine(folderPath, $"{note.Id}.rtf");
 
-            if (!Directory.Exists(folderPath)) 
+            if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
@@ -243,7 +259,7 @@ namespace WPF_Notes.ViewModel
 
         [RelayCommand]
         private void SetStatusBarRichTextBoxText(RichTextBox box)
-        { 
+        {
             int charactersAmount = (new TextRange(box.Document.ContentStart, box.Document.ContentEnd)).Text.Length;
             StatusBarRichTextBoxText = $"Note document length: {charactersAmount} characters";
         }
