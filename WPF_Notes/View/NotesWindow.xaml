@@ -70,7 +70,7 @@
         </ListView>
         <Grid Grid.Row="0" 
               Grid.Column="1"
-              Background="{Binding DarkerColor}">
+              Background="{Binding DarkerSelectedNotebookColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -147,6 +147,14 @@
                           IsEditable="False" 
                           SelectedItem="{Binding FontComboBoxSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                           SelectionChanged="ComboBox_SelectionChanged"/>
+                <Separator/>
+                <Button Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding SaveNoteCommand}"
+                        CommandParameter="{Binding ElementName=RichTextBox}">
+                    <Image Source="../Assets/save_symbol.png" 
+                           Width="20" Height="20"/>
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <Grid Grid.Row="1"
@@ -166,7 +174,7 @@
         </StatusBar>
         <StatusBar Grid.Row="2" 
                    Grid.Column="1"
-                   Background="{Binding DarkerColor}">
+                   Background="{Binding DarkerSelectedNotebookColor}">
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusBarNotesText}"/>
             </StatusBarItem>

@@ -42,18 +42,19 @@ namespace WPF_Notes.ViewModel
                     SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
                     GetNotes();
                 }
+                DarkerSelectedNotebookColor = "#d3d3d3";
             }
             else
             {
                 GetNotes();
-                DarkerColor = LightenDarkenColor(SelectedNotebook.Color,0.9f);
+                DarkerSelectedNotebookColor = LightenDarkenColor(SelectedNotebook.Color,0.9f);
             }
 
 
         }
 
         [ObservableProperty]
-        private string darkerColor;
+        private string darkerSelectedNotebookColor;
 
         [ObservableProperty]
         private Note selectedNote;
@@ -95,6 +96,7 @@ namespace WPF_Notes.ViewModel
         {
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
+            DarkerSelectedNotebookColor = "#d3d3d3";
             GetNotebooks();
 
             if (Notebooks.Count > 0)
@@ -267,6 +269,30 @@ namespace WPF_Notes.ViewModel
 
             note.FileLocation = rtfFile;
             DatabaseHelper.Update(note);
+
+            FileStream fileStream = new FileStream(rtfFile, FileMode.Create);
+
+            var content = new TextRange(box.Document.ContentStart, box.Document.ContentEnd);
+
+            content.Save(fileStream, DataFormats.Rtf);
+
+            fileStream.Close();
+        }
+
+        [RelayCommand]
+        private void SaveNote(RichTextBox box) 
+        {
+            if (SelectedNote == null) return;
+            string folderPath = Environment.CurrentDirectory + "/NoteFolder/";
+            string rtfFile = System.IO.Path.Combine(folderPath, $"{SelectedNote.Id}.rtf");
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            SelectedNote.FileLocation = rtfFile;
+            DatabaseHelper.Update(SelectedNote);
 
             FileStream fileStream = new FileStream(rtfFile, FileMode.Create);
 

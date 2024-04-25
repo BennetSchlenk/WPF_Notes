@@ -11,6 +11,7 @@
     <None Remove="Assets\add_symbol.png" />
     <None Remove="Assets\close_symbol.png" />
     <None Remove="Assets\edit_symbol.png" />
+    <None Remove="Assets\save_symbol.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
     <Resource Include="Assets\add_symbol.png" />
     <Resource Include="Assets\close_symbol.png" />
     <Resource Include="Assets\edit_symbol.png" />
+    <Resource Include="Assets\save_symbol.png" />
   </ItemGroup>
 
 </Project>
