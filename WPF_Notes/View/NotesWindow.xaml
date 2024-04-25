@@ -13,6 +13,7 @@
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
     </Window.Resources>
+    
     <Grid DataContext="{StaticResource vm}"
           x:Name="ContextGrid">
         <Grid.ColumnDefinitions>
@@ -69,7 +70,7 @@
         </ListView>
         <Grid Grid.Row="0" 
               Grid.Column="1"
-              Background="{Binding SelectedNotebook.Color}">
+              Background="{Binding DarkerColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -165,7 +166,7 @@
         </StatusBar>
         <StatusBar Grid.Row="2" 
                    Grid.Column="1"
-                   Background="{Binding SelectedNotebook.Color}">
+                   Background="{Binding DarkerColor}">
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusBarNotesText}"/>
             </StatusBarItem>

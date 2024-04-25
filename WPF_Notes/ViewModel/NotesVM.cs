@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,6 +20,7 @@ using WPF_Notes.Model;
 using WPF_Notes.View;
 using WPF_Notes.ViewModel.Commands;
 using WPF_Notes.ViewModel.Helpers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WPF_Notes.ViewModel
 {
@@ -43,10 +46,14 @@ namespace WPF_Notes.ViewModel
             else
             {
                 GetNotes();
+                DarkerColor = LightenDarkenColor(SelectedNotebook.Color,0.9f);
             }
 
 
         }
+
+        [ObservableProperty]
+        private string darkerColor;
 
         [ObservableProperty]
         private Note selectedNote;
@@ -81,16 +88,11 @@ namespace WPF_Notes.ViewModel
         [ObservableProperty]
         private object fontSizeComboBoxSelectedItem;
 
-        //private RichTextBox richTextBox;
-
-
-
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public NotesVM(/*RichTextBox richTextBox*/)
+        public NotesVM()
         {
-            //this.richTextBox = richTextBox;
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
             GetNotebooks();
@@ -106,7 +108,7 @@ namespace WPF_Notes.ViewModel
 
 
             List<double> fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
-            FontSizeComboBoxItemSource = fontSizes;;
+            FontSizeComboBoxItemSource = fontSizes; ;
         }
 
         [RelayCommand]
@@ -131,7 +133,7 @@ namespace WPF_Notes.ViewModel
             {
                 SelectedNotebook = notebook;
             }
-            else 
+            else
             {
                 if (Notebooks.Count > 0)
                 {
@@ -152,8 +154,8 @@ namespace WPF_Notes.ViewModel
             detailWindow.ShowDialog();
 
             GetNotes();
-            //Note must have at least one entry since we just created a note
-            SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
+            if(Notes.Count > 0)
+                SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
         }
 
         [RelayCommand]
@@ -211,16 +213,16 @@ namespace WPF_Notes.ViewModel
             }
 
             SetStatusBarNotesText(notes.Count, allNotes.Count);
-            
-            if(Notes.Count > 0) 
+
+            if (Notes.Count > 0)
             {
                 SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
             }
-            else 
+            else
             {
                 SelectedNote = null;
             }
-                
+
         }
 
         [RelayCommand]
@@ -364,6 +366,19 @@ namespace WPF_Notes.ViewModel
         {
             if (FontComboBoxSelectedItem == null) return;
             box.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, FontComboBoxSelectedItem);
+        }
+
+        private string LightenDarkenColor(string col, float amt)
+        {
+            var color = ColorTranslator.FromHtml(col);
+
+            int r = (int)(Convert.ToInt16(color.R) * amt);
+            int g = (int)(Convert.ToInt16(color.G) *amt);
+            int b = (int)(Convert.ToInt16(color.B) *amt);
+
+            var hex = "#" + string.Format("{0:X2}{1:X2}{2:X2}", r, g, b);
+
+            return hex;
         }
     }
 }
