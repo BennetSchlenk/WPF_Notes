@@ -32,7 +32,7 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        private void EditNote(Window window) 
+        private void EditNote(Window window)
         {
             EditNoteWindow editWindow = (EditNoteWindow)window;
 
@@ -45,9 +45,12 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        private void DeleteNote(Window window) 
+        private void DeleteNote(Window window)
         {
-            File.Delete(selectedNote.FileLocation);
+            if (selectedNote.FileLocation != null)
+            {
+                File.Delete(selectedNote.FileLocation);
+            }
             DatabaseHelper.Delete(selectedNote);
 
             window.Close();
