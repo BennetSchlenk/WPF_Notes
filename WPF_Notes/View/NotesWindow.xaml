@@ -93,7 +93,7 @@
         <ListView Grid.Row="1"
                   Grid.Column="1"
                   ItemsSource="{Binding Notes}"
-                  SelectedValue="{Binding SelectedNote}"
+                  SelectedValue="{Binding SelectedNote, Mode=TwoWay}"
                   SelectionChanged="NoteListView_SelectionChanged"
                   Background="{Binding SelectedNotebook.Color}"
                   BorderThickness="0"

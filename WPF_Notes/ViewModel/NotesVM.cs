@@ -81,13 +81,16 @@ namespace WPF_Notes.ViewModel
         [ObservableProperty]
         private object fontSizeComboBoxSelectedItem;
 
+        //private RichTextBox richTextBox;
+
 
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public NotesVM()
+        public NotesVM(/*RichTextBox richTextBox*/)
         {
+            //this.richTextBox = richTextBox;
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
             GetNotebooks();
@@ -103,7 +106,7 @@ namespace WPF_Notes.ViewModel
 
 
             List<double> fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
-            FontSizeComboBoxItemSource = fontSizes;
+            FontSizeComboBoxItemSource = fontSizes;;
         }
 
         [RelayCommand]
@@ -161,7 +164,18 @@ namespace WPF_Notes.ViewModel
             editWindow.ShowDialog();
 
             GetNotes();
-            SelectedNote = note;
+
+            if (Notes.Contains(note))
+            {
+                SelectedNote = note;
+            }
+            else
+            {
+                if (Notes.Count > 0)
+                {
+                    SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
+                }
+            }
         }
 
         [RelayCommand]
@@ -197,6 +211,16 @@ namespace WPF_Notes.ViewModel
             }
 
             SetStatusBarNotesText(notes.Count, allNotes.Count);
+            
+            if(Notes.Count > 0) 
+            {
+                SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
+            }
+            else 
+            {
+                SelectedNote = null;
+            }
+                
         }
 
         [RelayCommand]
