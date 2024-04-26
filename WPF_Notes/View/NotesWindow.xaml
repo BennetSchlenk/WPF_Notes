@@ -26,7 +26,7 @@
             <RowDefinition Height="15*"/>
             <RowDefinition Height="*" MinHeight="25" MaxHeight="30"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Background="#84B8FF">
+        <Grid Grid.Row="0" Background="#989898">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -50,7 +50,7 @@
         <ListView Grid.Row="1"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
                   ItemsSource="{Binding Notebooks}"
-                  Background="#C0DBFF"
+                  Background="#a9a9a9"
                   BorderThickness="0"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -163,11 +163,11 @@
                          TextChanged="RichTextBox_TextChanged" 
                          SelectionChanged="RichTexBox_SelectionChanged" 
                          DataContext="{StaticResource vm}"
-                         Background="White"/>
+                         Background="GhostWhite"/>
         </Grid>
         <StatusBar Grid.Row="2" 
                    Grid.Column="0"
-                   Background="#84B8FF">
+                   Background="#989898">
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusBarNotebooksText}"/>
             </StatusBarItem>
@@ -181,7 +181,7 @@
         </StatusBar>
         <StatusBar Grid.Row="2" 
                    Grid.Column="2"
-                   Background="White">
+                   Background="GhostWhite">
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusBarRichTextBoxText}"/>
             </StatusBarItem>

@@ -39,8 +39,6 @@ namespace WPF_Notes.ViewModel
             {
                 SetNewestNotebookAsSelected();
                 GetNotes();
-
-                DarkerSelectedNotebookColor = "#d3d3d3";
             }
             else
             {
@@ -237,12 +235,10 @@ namespace WPF_Notes.ViewModel
         {
             if (wrapper.oldValue == null)
             {
-                //MessageBox.Show($"new: {wrapper.newValue.Titel}   old: No Note was Selected   selectedNote:{SelectedNote.Titel}");
                 LoadNoteText(wrapper.newValue, wrapper.RichTextBox);
             }
             else
             {
-                //MessageBox.Show($"new: {wrapper.newValue.Titel} old: {wrapper.oldValue.Titel}    selectedNote:{SelectedNote.Titel}");
                 SaveNoteText(wrapper.oldValue, wrapper.RichTextBox);
                 LoadNoteText(wrapper.newValue, wrapper.RichTextBox);
             }
