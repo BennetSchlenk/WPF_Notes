@@ -47,7 +47,7 @@ namespace WPF_Notes.ViewModel
             else
             {
                 GetNotes();
-                DarkerSelectedNotebookColor = LightenDarkenColor(SelectedNotebook.Color,0.9f);
+                DarkerSelectedNotebookColor = LightenDarkenColor(SelectedNotebook.Color, 0.9f);
             }
 
 
@@ -120,7 +120,10 @@ namespace WPF_Notes.ViewModel
             detailWindow.ShowDialog();
 
             GetNotebooks();
-            SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
+            if (Notebooks.Count > 0)
+            {
+                SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
+            }
         }
 
         [RelayCommand]
@@ -156,7 +159,7 @@ namespace WPF_Notes.ViewModel
             detailWindow.ShowDialog();
 
             GetNotes();
-            if(Notes.Count > 0)
+            if (Notes.Count > 0)
                 SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
         }
 
@@ -280,7 +283,7 @@ namespace WPF_Notes.ViewModel
         }
 
         [RelayCommand]
-        private void SaveNote(RichTextBox box) 
+        private void SaveNote(RichTextBox box)
         {
             if (SelectedNote == null) return;
             string folderPath = Environment.CurrentDirectory + "/NoteFolder/";
@@ -399,8 +402,8 @@ namespace WPF_Notes.ViewModel
             var color = ColorTranslator.FromHtml(col);
 
             int r = (int)(Convert.ToInt16(color.R) * amt);
-            int g = (int)(Convert.ToInt16(color.G) *amt);
-            int b = (int)(Convert.ToInt16(color.B) *amt);
+            int g = (int)(Convert.ToInt16(color.G) * amt);
+            int b = (int)(Convert.ToInt16(color.B) * amt);
 
             var hex = "#" + string.Format("{0:X2}{1:X2}{2:X2}", r, g, b);
 
