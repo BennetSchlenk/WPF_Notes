@@ -283,7 +283,11 @@ namespace WPF_Notes.ViewModel
         [RelayCommand]
         private void SaveNote(RichTextBox box)
         {
-            if (SelectedNote == null) return;
+            if (SelectedNote == null) 
+            {
+                MessageBox.Show("Unable to save file, no note was selected!", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             string folderPath = Environment.CurrentDirectory + "/NoteFolder/";
             string rtfFile = System.IO.Path.Combine(folderPath, $"{SelectedNote.Id}.rtf");
 
@@ -384,14 +388,14 @@ namespace WPF_Notes.ViewModel
         [RelayCommand]
         private void FontSizeComboBoxTextChanged(RichTextBox box)
         {
-            if (FontSizeComboBoxSelectedItem == null) return;
+            if (FontSizeComboBoxSelectedItem == DependencyProperty.UnsetValue) return;
             box.Selection.ApplyPropertyValue(Inline.FontSizeProperty, FontSizeComboBoxSelectedItem);
         }
 
         [RelayCommand]
         private void FontComboBoxSelectionChanged(RichTextBox box)
         {
-            if (FontComboBoxSelectedItem == null) return;
+            if (FontComboBoxSelectedItem == DependencyProperty.UnsetValue) return;
             box.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, FontComboBoxSelectedItem);
         }
 
