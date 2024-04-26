@@ -37,11 +37,9 @@ namespace WPF_Notes.ViewModel
         {
             if (SelectedNotebook == null)
             {
-                if (Notebooks.Count > 0)
-                {
-                    SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
-                    GetNotes();
-                }
+                SetNewestNotebookAsSelected();
+                GetNotes();
+
                 DarkerSelectedNotebookColor = "#d3d3d3";
             }
             else
@@ -98,12 +96,7 @@ namespace WPF_Notes.ViewModel
             Notes = new ObservableCollection<Note>();
             DarkerSelectedNotebookColor = "#d3d3d3";
             GetNotebooks();
-
-            if (Notebooks.Count > 0)
-            {
-                SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
-            }
-
+            SetNewestNotebookAsSelected();
 
             var fontFamilies = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
             FontComboBoxItemSource = fontFamilies;
@@ -113,6 +106,31 @@ namespace WPF_Notes.ViewModel
             FontSizeComboBoxItemSource = fontSizes; ;
         }
 
+        private void SetNewestNotebookAsSelected()
+        {
+            if (Notebooks.Count > 0)
+            {
+                SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
+            }
+            else 
+            {
+                SelectedNotebook = null;
+                DarkerSelectedNotebookColor = "#d3d3d3";
+            }
+        }
+
+        private void SetNewestNoteAsSelected()
+        {
+            if (Notes.Count > 0)
+            {
+                SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
+            }
+            else 
+            {
+                SelectedNote = null;
+            }
+        }
+
         [RelayCommand]
         private void OpenNewNotebookWindow()
         {
@@ -120,10 +138,8 @@ namespace WPF_Notes.ViewModel
             detailWindow.ShowDialog();
 
             GetNotebooks();
-            if (Notebooks.Count > 0)
-            {
-                SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
-            }
+            SetNewestNotebookAsSelected();
+
         }
 
         [RelayCommand]
@@ -140,10 +156,7 @@ namespace WPF_Notes.ViewModel
             }
             else
             {
-                if (Notebooks.Count > 0)
-                {
-                    SelectedNotebook = Notebooks.OrderBy(p => p.CreatedAt).Reverse().First();
-                }
+                SetNewestNotebookAsSelected();
             }
         }
 
@@ -159,8 +172,7 @@ namespace WPF_Notes.ViewModel
             detailWindow.ShowDialog();
 
             GetNotes();
-            if (Notes.Count > 0)
-                SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
+            SetNewestNoteAsSelected();
         }
 
         [RelayCommand]
@@ -178,10 +190,7 @@ namespace WPF_Notes.ViewModel
             }
             else
             {
-                if (Notes.Count > 0)
-                {
-                    SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
-                }
+                SetNewestNoteAsSelected();
             }
         }
 
@@ -219,14 +228,7 @@ namespace WPF_Notes.ViewModel
 
             SetStatusBarNotesText(notes.Count, allNotes.Count);
 
-            if (Notes.Count > 0)
-            {
-                SelectedNote = Notes.OrderBy(p => p.CreatedAt).Reverse().First();
-            }
-            else
-            {
-                SelectedNote = null;
-            }
+            SetNewestNoteAsSelected();
 
         }
 
