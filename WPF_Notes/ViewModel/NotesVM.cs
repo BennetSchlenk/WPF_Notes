@@ -18,7 +18,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using WPF_Notes.Model;
 using WPF_Notes.View;
-using WPF_Notes.ViewModel.Commands;
 using WPF_Notes.ViewModel.Helpers;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
