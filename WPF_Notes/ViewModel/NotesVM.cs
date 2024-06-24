@@ -42,7 +42,7 @@ namespace WPF_Notes.ViewModel
             else
             {
                 GetNotes();
-                DarkerSelectedNotebookColor = LightenDarkenColor(SelectedNotebook.Color, 0.9f);
+                DarkerSelectedNotebookColor = DarkenColor(SelectedNotebook.Color, 0.9f);
             }
 
 
@@ -316,7 +316,11 @@ namespace WPF_Notes.ViewModel
         [RelayCommand]
         private void SetStatusBarRichTextBoxText(RichTextBox box)
         {
-            int charactersAmount = (new TextRange(box.Document.ContentStart, box.Document.ContentEnd)).Text.Length;
+            int charactersAmount = (new TextRange(box.Document.ContentStart, box.Document.ContentEnd)).Text.Trim('\r', '\n').Length;
+            //if (charactersAmount > 0) 
+            //{
+            //    charactersAmount -= 2;
+            //}
             StatusBarRichTextBoxText = $"Note document length: {charactersAmount} characters";
         }
 
@@ -398,7 +402,7 @@ namespace WPF_Notes.ViewModel
             box.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, FontComboBoxSelectedItem);
         }
 
-        private string LightenDarkenColor(string col, float amt)
+        private string DarkenColor(string col, float amt)
         {
             var color = ColorTranslator.FromHtml(col);
 

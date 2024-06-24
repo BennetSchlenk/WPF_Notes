@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WPF_Notes.Model;
 using WPF_Notes.ViewModel;
 
@@ -59,6 +48,8 @@ namespace WPF_Notes.View
         private void NoteListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RichTextBox box = RichTextBox;
+            if (box == null) return;
+
             var vm = (NotesVM)box.DataContext;
 
             if (e.AddedItems.Count == 0) return;
