@@ -1,5 +1,5 @@
 # WPF Notes
-Learning WPF MVVM with a bit more complexety.
+Learning WPF MVVM by extending course project.
 
 
 ![grafik](https://github.com/BennetSchlenk/WPF_Notes/assets/25987836/4f32c548-2ba1-471c-9432-1e2b95294385)
